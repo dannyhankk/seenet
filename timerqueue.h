@@ -10,11 +10,15 @@
 #include "timerid.h"
 namespace seenet{
     namespace net{
+
+        class EventLoop;
+        class Timer;
+        class TimerId;
+
         class TimerQueue:public NonCopyable
         {
         public:
-        using TimerCallback=std::function<void()>;
-            TimerQueue(EventLoop_sPt loop);
+           explicit TimerQueue(EventLoop_sPt loop);
             ~TimerQueue();
 
             TimerId addTimer(const TimerCallback &cb,
