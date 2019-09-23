@@ -117,6 +117,13 @@ namespace seenet{
 
 		}
 
+		std::vector<TimerQueue::TimerEntry> TimerQueue::getExpired(std::time_t now)
+		{
+			assert(m_timers.size() == m_activeTimers.size());
+			std::vector<TimerEntry> expired;
+			
+		}
+
 
 
 		

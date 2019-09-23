@@ -20,6 +20,11 @@ namespace seenet{
         class TimerQueue:public NonCopyable
         {
         public:
+            using TimerEntry=std::pair<std::time_t, Timer_sPt>;
+            using TimerSet=std::set<TimerEntry>;
+            
+            using ActiveTimer=std::pair<Timer_sPt, int64_t>;
+            using ActiveTimerSet=std::set<ActiveTimer>;
            explicit TimerQueue(EventLoop_sPt loop);
             ~TimerQueue();
 
@@ -28,11 +33,7 @@ namespace seenet{
                              double interval);
             void cancel(TimerId timerId);
         private:
-            using TimerEntry=std::pair<std::time_t, Timer_sPt>;
-            using TimerSet=std::set<TimerEntry>;
-            
-            using ActiveTimer=std::pair<Timer_sPt, int64_t>;
-            using ActiveTimerSet=std::set<ActiveTimer>;
+
 
             void addTimerInLoop(Timer_sPt timer);
             void cancelInLoop(TimerId timerId);
