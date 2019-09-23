@@ -35,7 +35,7 @@ namespace seenet{
 
             bool isWriting() const { return m_events & kWriteEvent;}
             bool isReading() const { return m_events & kReadEvent;}
-            bool isNoneEvent() const{ return m_events == kNoneEvent;}
+            bool isNonEvent() const{ return m_events == kNoneEvent;}
 
             int fd() const { return m_fd;}
 

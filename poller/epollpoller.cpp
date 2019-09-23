@@ -1,6 +1,6 @@
 
 #include <poll.h>
-#include <epoll.h>
+#include <sys/epoll.h>
 #include <unistd.h>
 
 #include "epollpoller.h"
@@ -9,7 +9,8 @@
 #include "../channel.h"
 
 #include <assert.h>
-#include <errno.h>
+#include <sys/errno.h>
+#include <strings.h>
 
 namespace{
     // a new channel
@@ -81,7 +82,7 @@ namespace seenet{
                int fd = ch->fd();
                ChannelMap::const_iterator it = m_channels.find(fd);
                assert(it != m_channels.end());
-               asert(it->second == ch);
+               assert(it->second == ch);
 #endif
                //give events to channel
                ch->set_revents(m_events[i].events);
@@ -138,8 +139,8 @@ namespace seenet{
             int fd = channel->fd();
             //todo: log fd num
             assert(m_channels.find(fd) != m_channels.end());
-            assert(m_channels[fd] == channel.get())
-            assert(channel->isNoneEvent());
+            assert(m_channels[fd] == channel.get());
+            assert(channel->isNonEvent());
             int index = channel->index();
             assert(index == kAdded || index == kDeleted);
             size_t n = m_channels.erase(fd);

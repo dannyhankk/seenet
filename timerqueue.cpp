@@ -124,8 +124,63 @@ namespace seenet{
 			
 		}
 
+        void TimerQueue::reset(const std::vector<TimerEntry>& expired, std::time_t now)
+		{
+			std::time_t nextExpire;
+			for(std::vector<TimerEntry> ::const_iterator it = expired.begin();
+			   it != expired.end(); ++it)
+			   {
+				   ActiveTimer timer(it->second, it->second->sequence());
+				   if(it->second->repeat() &&
+				      m_cancelingTimers.find(timer) == m_cancelingTimers.end())
+					  {
+						  it->second->restart(now);
+						  insert(it->second);
+					  }
+					  else
+					  {
+						  delete it->second.get();
+					  }
+					  
+			   }
 
+			if(!m_timers.empty())
+			{
+				nextExpire = m_timers.begin()->second->expiration();
+			}
 
-		
+			if(nextExpire > 0)
+			{
+                //reset timerfd
+			}
+		}
+
+		bool TimerQueue::insert(Timer_sPt timer)
+		{
+			auto loop = m_wLoop.lock();
+			if(loop)
+			{
+				loop->assertInLoopThread();
+				assert(m_timers.size() == m_activeTimers.size());
+				bool earliestChanged = false;
+				std::time_t when = timer->expiration();
+				TimerSet::iterator it = m_timers.begin();
+				if(it == m_timers.end() || when < it->first)
+				{
+					earliestChanged = true;
+				}
+				{
+					std::pair<TimerSet::iterator, bool> result = m_timers.insert(TimerEntry(when, timer));
+					assert(result.second);
+				}
+				{
+					std::pair<ActiveTimerSet::iterator, bool> result 
+					    = m_activeTimers.insert(ActiveTimer(timer, timer->sequence()));
+						assert(result.second); 
+				}
+				assert(m_timers.size() == m_activeTimers.size());
+				return earliestChanged;
+			}
+		}	
     } // namespace net 
 }
