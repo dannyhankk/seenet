@@ -5,6 +5,8 @@
 #include <sys/epoll.h>
 #include <unistd.h>
 
+#include <memory.h>
+
 namespace seenet{
     namespace net {
         /*
@@ -40,21 +42,31 @@ namespace seenet{
                 }
             }
 
-            if(m_revents & (EPOLLIN | EPOLLRI | EPOLLRDHUP))
+            // read event
+            if(m_revents & (EPOLLIN | EPOLLERR | EPOLLRDHUP | EPOLLHUP))
             {
                if(m_readCallback)
                {
                    m_readCallback();
                }
             }
-
-            if(m_readCallback & EPOLLOUT)
+            // write event
+            if(m_revents & (EPOLLOUT | EPOLLERR | EPOLLHUP))
             {
                 if(m_writeCallback)
                 {
                     m_writeCallback();
                 }
             }  
+        }
+
+        void Channel::remove()
+        {
+            auto loop = m_loop.lock();
+            if(loop)
+            {
+                loop->removeChannel(shared_from_this());
+            }
         }
     }
 }

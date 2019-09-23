@@ -17,7 +17,7 @@ namespace seenet{
             :m_callback(cb), m_expiration(when),
                     m_interval(interval),
                     m_bRepeat(interval > 0.0),
-                    seq(++m_numCreated)
+                    m_seq(++m_numCreated)
             {
 
             }
@@ -37,6 +37,8 @@ namespace seenet{
               return m_bRepeat;
             }
 
+            int64_t sequence() const {return m_seq;}
+
             void restart(std::time_t now);
 
             static int64_t numCreated()
@@ -49,7 +51,7 @@ namespace seenet{
           std::time_t m_expiration;
           const double m_interval;
           const bool m_bRepeat;
-          const int64_t seq;
+          const int64_t m_seq;
           static std::atomic<int64_t> m_numCreated;
         };
     }

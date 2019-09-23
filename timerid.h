@@ -26,7 +26,7 @@ namespace seenet{
 
             friend class TimerQueue;
         private:
-            Timer_wPt m_timer;
+            Timer_sPt m_timer;
             int64_t m_seq;
         };
     }

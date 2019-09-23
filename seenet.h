@@ -1,7 +1,9 @@
 #ifndef _SEENET_H
 #define _SEENET_H
 
+#define __x86_64__
 #include<memory>
+#include<functional>
 
 namespace seenet{
     namespace net {

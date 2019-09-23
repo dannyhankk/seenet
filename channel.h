@@ -3,10 +3,12 @@
 #include "seenet.h"
 #include <functional>
 #include "noncopyable.h"
-class EventLoop;
+
 
 namespace seenet{
     namespace net{
+		class EventLoop;
+		
         class Channel:public NonCopyable,
         std::enable_shared_from_this<Channel>
         {
@@ -33,7 +35,7 @@ namespace seenet{
 
             bool isWriting() const { return m_events & kWriteEvent;}
             bool isReading() const { return m_events & kReadEvent;}
-             bool isNoneEvent() const{ return m_events == kNoneEvent;}
+            bool isNoneEvent() const{ return m_events == kNoneEvent;}
 
             int fd() const { return m_fd;}
 
@@ -43,6 +45,7 @@ namespace seenet{
             
             //
             EventLoop_sPt ownerLoop(){ return m_loop.lock();}
+            void remove();
             // for Poller
             int index() {return m_index;}
             void set_idnex(int idx){m_index = idx;}
