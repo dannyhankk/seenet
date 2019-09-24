@@ -1,3 +1,4 @@
+#include "seenet.h"
 #include "eventloop.h"
 #include "poller.h"
 #include "channel.h"

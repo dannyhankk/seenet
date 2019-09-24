@@ -1,13 +1,12 @@
 
-#include <poll.h>
-#include <sys/epoll.h>
-#include <unistd.h>
-
-#include "epollpoller.h"
-
 #include "../seenet.h"
+#include "epollpoller.h"
 #include "../channel.h"
 
+
+#include <sys/poll.h>
+#include <sys/epoll.h>
+#include <unistd.h>
 #include <assert.h>
 #include <sys/errno.h>
 #include <strings.h>

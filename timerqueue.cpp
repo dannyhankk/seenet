@@ -1,3 +1,4 @@
+#include "seenet.h"
 #include "timerqueue.h"
 
 #include "channel.h"
@@ -8,6 +9,8 @@
 #include <ctime>
 #include <unistd.h>
 #include <sys/timerfd.h>
+// for CLOCK_* macro define
+#include <linux/time.h>
 #include <assert.h>
 
 namespace seenet{
@@ -28,7 +31,6 @@ namespace seenet{
  
 	   }
 
-	   
         TimerQueue::TimerQueue(EventLoop_sPt loop)
         : m_wLoop(loop),
           m_timerFd(detail::createTimerfd()),
@@ -121,7 +123,7 @@ namespace seenet{
 		{
 			assert(m_timers.size() == m_activeTimers.size());
 			std::vector<TimerEntry> expired;
-			
+
 		}
 
         void TimerQueue::reset(const std::vector<TimerEntry>& expired, std::time_t now)
