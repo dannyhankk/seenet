@@ -22,13 +22,20 @@ namespace seenet{
 
             void setNewConnectionCallback(const NewConnectionCallback& cb)
             {
-                
+                m_newConnectionCallback = cb;
             }
+
+            bool listening() const {return m_bListening;}
+            void listen();
         private:
             void handleRead();
 
             EventLoop_sPt m_loop;
             Socket m_acceptSocket;
+            Channel_sPt m_acceptChannel;
+            NewConnectionCallback m_newConnectionCallback;
+            bool m_bListening;
+            int m_idleFd;
 
         };
     }
