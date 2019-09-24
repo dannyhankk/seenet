@@ -12,7 +12,10 @@
 #include <linux/fcntl.h>
 #include <unistd.h>
 #include <assert.h>
+#include <stdio.h>
 
+// inner class 
+// used for TcpServer
 namespace seenet{
     namespace net{
         Acceptor::Acceptor(EventLoop_sPt loop, const InetAddress& ListenAddr, bool reuseport)
@@ -20,7 +23,7 @@ namespace seenet{
         m_acceptSocket(sockets::createNonblockingOrDie(ListenAddr.family())),
         m_acceptChannel(new Channel(loop, m_acceptSocket.fd())),
         m_bListening(false),
-        m_idleFd(::open("/dev/null", O_RDONLY | O_CLOEXEC))
+        m_idleFd(open("/dev/null", O_RDONLY | O_CLOEXEC))
         {
             assert(m_idleFd >= 0);
             m_acceptSocket.setReuseAddr(true);
@@ -68,7 +71,7 @@ namespace seenet{
                     ::close(m_idleFd);
                     m_idleFd = ::accept(m_acceptSocket.fd(), NULL, NULL);
                     ::close(m_idleFd);
-                    m_idleFd = ::open("/dev/null", O_RDONLY | O_CLOEXEC);
+                    m_idleFd = open("/dev/null", O_RDONLY | O_CLOEXEC);
                 }
             }
         }
