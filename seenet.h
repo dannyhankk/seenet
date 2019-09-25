@@ -28,10 +28,14 @@ namespace seenet{
         
         // callbacks
         using TimerCallback=std::function<void()>;
+        //for tcpconnection
+        // reason use reference or shared_ptr
+        // 回调函数不会做太多超时操作，都是在TcpConnection的线程中执行，这个指针也不太可能会被拷贝到其它地方使用
+        // 因此可以使用引用，来减少一次指针复制
         using ConnectionCallback=std::function<void(const TcpConnection_sPt&)>;
-        using CloseCallback=std::function<void(const TcpConnection_sPt)>;
-        using WriteCompleteCallback=std::function<void(const TcpConnection_sPt)>;
-        using HighWaterMarkCallback=std::function<void(const TcpConnection_sPt, size_t)>;
+        using CloseCallback=std::function<void(const TcpConnection_sPt&)>;
+        using WriteCompleteCallback=std::function<void(const TcpConnection_sPt&)>;
+        using HighWaterMarkCallback=std::function<void(const TcpConnection_sPt&, size_t)>;
 
         using MessageCallback = std::function<void(const TcpConnection_sPt&, Buffer*, std::time_t)>;
 

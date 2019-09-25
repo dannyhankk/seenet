@@ -63,6 +63,11 @@
         "any": "cpp",
         "deque": "cpp",
         "queue": "cpp",
-        "random": "cpp"
-    }
+        "random": "cpp",
+        "array": "cpp",
+        "fstream": "cpp",
+        "string_view": "cpp",
+        "numeric": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
 }

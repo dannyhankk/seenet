@@ -41,10 +41,10 @@ namespace seenet{
 
             //void
             // wait for buff
-            //void send(Buff* message); 
+            void send(Buffer* message); 
             void shutdown();
-            void forceclose();
-            void forcecloseWithDelay(double seconds);
+            void forceClose();
+            void forceCloseWithDelay(double seconds);
             void setTcpNoDelay(bool on);
             // reading or not
             void startRead();

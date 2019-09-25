@@ -2,6 +2,7 @@
 #define _SEENET_EVENTLOOP_H
 #include "seenet.h"
 #include "noncopyable.h"
+#include "timerid.h"
 
 #include <thread>
 #include <atomic>
@@ -36,6 +37,10 @@ namespace seenet{
              void runInLoop(const Functor& cb);
              void queueInLoop(const Functor& cb);
              size_t queueSize() const;
+
+             TimerId runAt(const std::time_t& time, const TimerCallback& cb);
+             TimerId runAfter(double delay, const TimerCallback& cb);
+
 
              void assertInLoopThread()
              {

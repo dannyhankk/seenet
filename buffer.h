@@ -29,6 +29,12 @@ namespace seenet{
              }
 
 
+            void swap(Buffer& rhs)
+            {
+                m_buff.swap(rhs.m_buff);
+                std::swap(m_readerIndex, rhs.m_readerIndex);
+                std::swap(m_wirterIndex, rhs.m_wirterIndex);
+            }
              size_t readableBytes() const 
              { return m_wirterIndex - m_readerIndex; }
 
@@ -127,16 +133,24 @@ namespace seenet{
                  return result;
              }
 
-             std::string_view toStringView() const 
+             std::string_view toStringView() const
              { 
                  return std::string_view(peek(), static_cast<int>(readableBytes()));
              }
 
-             void append(const std::string_view& str)
+
+             void append(std::string_view& str)
              {
                  append(str.data(), str.size());
              }
 
+             void shrink(size_t reserve)
+             {
+                 Buffer other;
+                 other.ensureWritableBytes(readableBytes()+reserve);
+                 other.append(toStringView());
+                 swap(other);
+             }
              void append(const char * data, size_t len)
              {
                  ensureWritableBytes(len);
@@ -295,19 +309,12 @@ namespace seenet{
                  std::copy(d, d+len, begin()+m_readerIndex);
              }
              
-             void shrink(size_t reserve)
-             {
-                 Buffer other;
-                 other.ensureWritableBytes(readableBytes()+reserve);
-                 other.append(toStringView());
-                 swap(other);
-             }
-
              size_t internalCapacity() const 
              { 
                  return m_buff.capacity();
              }
              
+             ssize_t readFd(int fd, int *savedErrno);
          private:
             char *begin()
             { return &*m_buff.begin();}
