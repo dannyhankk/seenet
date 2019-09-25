@@ -3,6 +3,7 @@
 
 #include "../seenet.h"
 #include "../noncopyable.h"
+#include "../copyable.h"
 
 #include <string_view>
 #include <netinet/in.h>
@@ -13,7 +14,7 @@ namespace seenet{
             const struct sockaddr* sockaddr_cast(const struct sockaddr_in6* addr);
         }
 
-        class InetAddress: public NonCopyable
+        class InetAddress: public Copyable
         {
         public:
             explicit InetAddress(uint16_t port = 0, bool loobackonly = false, bool ipv6 = false);

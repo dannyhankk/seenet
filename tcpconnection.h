@@ -4,9 +4,11 @@
 #include "seenet.h"
 #include "noncopyable.h"
 #include "util/util_inetaddress.h"
+#include "buffer.h"
 #include <memory>
 #include <string>
 #include <ctime>
+#include <any>
 
 namespace seenet{
     namespace net{
@@ -31,11 +33,76 @@ namespace seenet{
             bool Disconnected() const{ return m_state == kDisconnected;}
 
             // return true if success
-            bool getTcpInfo(struct tcp_ifo*) const;
+            bool getTcpInfo(struct tcp_info*) const;
             std::string getTcpInfoString() const;
             //void
             void send(const void* message, int len);
+            void send(const std::string_view& message);
 
+            //void
+            // wait for buff
+            //void send(Buff* message); 
+            void shutdown();
+            void forceclose();
+            void forcecloseWithDelay(double seconds);
+            void setTcpNoDelay(bool on);
+            // reading or not
+            void startRead();
+            void stopRead();
+            bool isReading() const { return m_reading;}
+
+            void setContext(const std::any& context)
+            {
+                m_context = context;
+            }
+            const std::any* getContext() const 
+            {
+                return &m_context;
+            }
+            
+            std::any* getMutableContext()
+            {
+                return &m_context;
+            }
+
+            void setNewConnectionCallback(const ConnectionCallback& cb)
+            {
+                m_connCallback = cb;
+            }
+
+            void setMessageCallback(const MessageCallback& cb)
+            {
+                m_messageCallback = cb;
+            }
+
+            void setWriteCompleteCallback(const WriteCompleteCallback& cb)
+            {
+                m_writeCompleteCallback = cb;
+            }
+
+            void setHighWaterMarkCallback(const HighWaterMarkCallback& cb, size_t highWaterMark)
+            {
+                m_highWateMarkCallback = cb;
+                m_highWaterMark = highWaterMark;
+            }
+
+            Buffer* inputBuffer()
+            {
+                return &m_inputBuffer;
+            }
+
+            Buffer* outputBuffer()
+            {
+                return &m_outputBuffer;
+            }
+
+            void setCloseCallback(const CloseCallback& cb)
+            {
+                m_closeCallback = cb;
+            }
+
+            void connectEstablished();
+            void connectDestroyed();
 
         private:
             enum StateE{kDisconnected, kConnecting, kConnected, kDisconnecting};
@@ -65,7 +132,20 @@ namespace seenet{
             std::unique_ptr<Socket> m_socket;
             std::unique_ptr<Channel> m_Channel;
             const InetAddress m_localAddr;
-            const InetAddress m_peerAddr; 
+            const InetAddress m_peerAddr;
+
+            ConnectionCallback m_connCallback;
+            MessageCallback m_messageCallback;
+            WriteCompleteCallback m_writeCompleteCallback;
+            HighWaterMarkCallback m_highWateMarkCallback;
+            CloseCallback m_closeCallback;
+
+            size_t m_highWaterMark;
+            Buffer m_inputBuffer;
+            Buffer m_outputBuffer;
+            std::any m_context;
+
+
         };
     }
 }

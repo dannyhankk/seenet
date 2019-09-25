@@ -14,16 +14,19 @@ namespace seenet{
         {
         public:
             using EventCallback=std::function<void()>;
+            using ReadEventCallback=std::function<void(std::time_t)>;
 
             Channel(EventLoop_sPt loop, int fd);
 
             void handleEvent();
 
-            void setReadCallback(const EventCallback& cb){ m_readCallback = cb; }
+            void setReadCallback(const ReadEventCallback& cb){ m_readCallback = cb; }
 
             void setWriteCallback(const EventCallback& cb){ m_writeCallback = cb; }
 
             void setErrorCallback(const EventCallback& cb){ m_errorCallback = cb; }
+
+            void setCloseCallback(const EventCallback& cb){ m_closeCallback = cb;}
 
             void enableReading(){ m_events |= kReadEvent; update();}
             void disableReading(){ m_events &= ~kReadEvent; update();}
@@ -53,9 +56,10 @@ namespace seenet{
             void update();
 
             // callbacks
-            EventCallback m_readCallback;
+            ReadEventCallback m_readCallback;
             EventCallback m_writeCallback;
             EventCallback m_errorCallback;
+            EventCallback m_closeCallback;
 
             //for poller
             const int m_fd;

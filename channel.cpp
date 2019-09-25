@@ -47,7 +47,7 @@ namespace seenet{
             {
                if(m_readCallback)
                {
-                   m_readCallback();
+                   m_readCallback(std::time(nullptr));
                }
             }
             // write event

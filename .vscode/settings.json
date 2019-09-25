@@ -58,6 +58,11 @@
         "xmemory0": "cpp",
         "*.tcc": "cpp",
         "cinttypes": "cpp",
-        "hashtable": "cpp"
+        "hashtable": "cpp",
+        "algorithm": "cpp",
+        "any": "cpp",
+        "deque": "cpp",
+        "queue": "cpp",
+        "random": "cpp"
     }
 }
