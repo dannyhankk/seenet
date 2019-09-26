@@ -4,7 +4,7 @@
 #define __x86_64__
 #include<memory>
 #include<functional>
-
+#include<ctime>
 namespace seenet{
     namespace net {
         class Channel;
@@ -38,6 +38,16 @@ namespace seenet{
         using HighWaterMarkCallback=std::function<void(const TcpConnection_sPt&, size_t)>;
 
         using MessageCallback = std::function<void(const TcpConnection_sPt&, Buffer*, std::time_t)>;
+
+
+        //thread 
+        using ThreadInitCallback = std::function<void(EventLoop_sPt)>;
+
+        
+        void defaultConnectionCallback(const TcpConnection_sPt& conn);
+        void defaultMessageCallback(const TcpConnection_sPt& conn,
+                                    Buffer* buffer,
+                                    std::time_t receiveTime);
 
 
 

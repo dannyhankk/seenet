@@ -13,7 +13,7 @@ namespace seenet{
         class EventLoop;
         class InetAddress;
 
-        class Acceptor:public NonCopyable
+        class Acceptor:public NonCopyable, std::enable_shared_from_this<Acceptor>
         {
         public:
             using NewConnectionCallback = std::function<void(int sockFd, const InetAddress&)>;
