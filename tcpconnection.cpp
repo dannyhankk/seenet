@@ -244,7 +244,7 @@ namespace seenet{
             m_loop->assertInLoopThread();
             assert(m_state == kConnecting);
             setState(kConnected);
-            m_Channel->tie(shared_from_this());
+            //m_Channel->tie(shared_from_this());
             m_Channel->enableReading();
             m_connCallback(shared_from_this());
         }
