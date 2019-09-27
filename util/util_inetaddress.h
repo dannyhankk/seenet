@@ -5,7 +5,7 @@
 #include "../noncopyable.h"
 #include "../copyable.h"
 
-#include <string_view>
+#include <string>
 #include <netinet/in.h>
 
 namespace seenet{

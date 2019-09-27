@@ -9,7 +9,7 @@
 #include<vector>
 
 #include<assert.h>
-#include<string.h>
+#include<string>
 //for ssize_t
 #include<unistd.h>
 
