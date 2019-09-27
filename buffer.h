@@ -138,7 +138,6 @@ namespace seenet{
                  return std::string_view(peek(), static_cast<int>(readableBytes()));
              }
 
-
              void append(std::string_view& str)
              {
                  append(str.data(), str.size());
