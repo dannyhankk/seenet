@@ -9,7 +9,7 @@
 #include <errno.h>
 #include <linux/types.h>
 #include <linux/stat.h>
-#include <linux/fcntl.h>
+#include <fcntl.h>
 #include <unistd.h>
 #include <assert.h>
 #include <stdio.h>
@@ -71,7 +71,7 @@ namespace seenet{
                     ::close(m_idleFd);
                     m_idleFd = ::accept(m_acceptSocket.fd(), NULL, NULL);
                     ::close(m_idleFd);
-                    m_idleFd = open("/dev/null", O_RDONLY | O_CLOEXEC);
+                    m_idleFd = ::open("/dev/null", O_RDONLY | O_CLOEXEC);
                 }
             }
         }

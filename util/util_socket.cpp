@@ -3,11 +3,12 @@
 #include "util_socketops.h"
 #include "util_inetaddress.h"
 
-#include <netinet/in.h>
 #include <netinet/tcp.h>
+#include <netinet/in.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <stdio.h>
+#include <string.h>
 
 namespace seenet{
     namespace net{
@@ -111,11 +112,5 @@ namespace seenet{
             ::setsockopt(m_socketFd, SOL_SOCKET, SO_KEEPALIVE,
                         &optval, static_cast<socklen_t>(sizeof(optval)));
         }
-
-        
-       
-        
-
-
     }
 }

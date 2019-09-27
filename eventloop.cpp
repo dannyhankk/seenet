@@ -48,7 +48,7 @@ namespace seenet{
         void EventLoop::quit()
         {
             m_bLooping.store(false);
-            if(!isInLoopThread)
+            if(!isInLoopThread())
             {
                 wakeup();
             }
@@ -71,12 +71,6 @@ namespace seenet{
 
             m_bCallingPendingFactors = false;
         }// end doPendingFunctors
-
-        void EventLoop::quit()
-        {
-            m_bLooping.store(false);
-            wakeup();
-        }
 
         void EventLoop::updateChannel(Channel_sPt channel)
         {

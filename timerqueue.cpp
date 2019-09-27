@@ -10,7 +10,7 @@
 #include <unistd.h>
 #include <sys/timerfd.h>
 // for CLOCK_* macro define
-#include <linux/time.h>
+//#include <linux/time.h>
 #include <assert.h>
 
 namespace seenet{

@@ -5,6 +5,7 @@
 #include "../noncopyable.h"
 
 
+struct tcp_info;
 namespace seenet{
 
     namespace net {

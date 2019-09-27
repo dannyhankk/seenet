@@ -26,8 +26,9 @@ target_link_libraries(seenet rt)
 
 install(TARGETS seenet DESTINATION lib)
 
+include_directories(/usr/inclue)
 set (HEADERS
-    epollpoller.h
+    poller/epollpoller.h
     util/util_socket.h
     util/util_endian.h
     util/util_socketops.h

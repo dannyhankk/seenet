@@ -12,7 +12,6 @@ struct epoll_event;
 namespace seenet{
     namespace net{
         class EPollPoller:public Poller, 
-                          NonCopyable,
                           std::enable_shared_from_this<EPollPoller>
         {
         public:

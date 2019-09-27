@@ -8,10 +8,9 @@ namespace seenet{
     namespace net{
         EventLoopThread::EventLoopThread(const ThreadInitCallback& cb, const std::string& name):
         // for now ignore thread name
-        m_loop(NULL), m_bExisting(false), m_thread(nullptr),
-          m_callback(cb), m_threadName(name)
+        m_loop(NULL), m_bExisting(false), m_threadName(name)
           {
-
+                m_callback = cb;
           }
 
         EventLoopThread::~EventLoopThread()
@@ -40,7 +39,7 @@ namespace seenet{
 
         void EventLoopThread::threadFunc()
         {
-            EventLoop_sPt loop = std::make_shared<EventLoop>(new EventLoop());
+            EventLoop_sPt loop(new EventLoop());
             if(m_callback)
             {
                 m_callback(loop);

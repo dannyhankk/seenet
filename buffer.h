@@ -12,6 +12,8 @@
 #include<string>
 //for ssize_t
 #include<unistd.h>
+#include<memory.h>
+#include<string.h>
 
 namespace seenet{
     namespace net{
