@@ -1,5 +1,5 @@
 #ifndef _SEENET_NONCOPYABLE_H
-#define _SEENT_NONCOPYABLE_H
+#define _SEENET_NONCOPYABLE_H
 
 
 namespace seenet{

@@ -1,7 +1,10 @@
 #ifndef _SEENET_H
 #define _SEENET_H
 
+#ifndef __x86_64__
 #define __x86_64__
+#endif
+
 #include<memory>
 #include<functional>
 #include<ctime>
