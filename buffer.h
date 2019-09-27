@@ -10,6 +10,8 @@
 
 #include<assert.h>
 #include<string.h>
+//for ssize_t
+#include<unistd.h>
 
 namespace seenet{
     namespace net{
@@ -133,14 +135,14 @@ namespace seenet{
                  return result;
              }
 
+             void append(std::string_view str)
+             {
+                 append(str.data(), str.size());
+             }
+
              std::string_view toStringView() const
              { 
                  return std::string_view(peek(), static_cast<int>(readableBytes()));
-             }
-
-             void append(std::string_view& str)
-             {
-                 append(str.data(), str.size());
              }
 
              void shrink(size_t reserve)
@@ -150,6 +152,7 @@ namespace seenet{
                  other.append(toStringView());
                  swap(other);
              }
+
              void append(const char * data, size_t len)
              {
                  ensureWritableBytes(len);
@@ -157,7 +160,7 @@ namespace seenet{
                  hasWritten(len);
              }
 
-             void append(const char *data, size_t len)
+             void append(const void *data, size_t len)
              {
                  append(static_cast<const char*>(data), len);
              }
