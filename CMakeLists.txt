@@ -18,13 +18,7 @@ set (SRCS
      tcpserver.cpp
      timer.cpp
      timerqueue.cpp)
-set (LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 
-add_library( seenet ${SRCS})
-
-target_link_libraries(seenet rt)
-
-install(TARGETS seenet DESTINATION lib)
 
 include_directories(/usr/inclue)
 set (HEADERS
@@ -47,4 +41,15 @@ set (HEADERS
     timer.h
     timerqueue.h
     timerid.h)
-install (FILES ${HEADERS} DESTINATION include/seenet/)
+	
+set (LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/../lib)
+
+add_library( seenet ${SRCS})
+
+target_link_libraries(seenet rt)
+
+install(TARGETS seenet DESTINATION ../lib)
+
+install (FILES ${HEADERS} DESTINATION ../include)
+
+

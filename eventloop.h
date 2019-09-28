@@ -59,6 +59,8 @@ namespace seenet{
             void doPendingFunctors();
             void abortNotInLoopThread();
 
+            int m_wakeupFd;
+
             std::atomic<bool> m_bLooping;
             bool m_bCallingPendingFactors;
             const std::thread::id m_threadId;    
@@ -69,6 +71,8 @@ namespace seenet{
             std::time_t m_PollReturnTime;
 
             std::shared_ptr<Poller> m_poller;
+
+            std::unique_ptr<TimerQueue> m_timerQueue;
 
             // pending factors
             mutable std::mutex m_pendingFactorLock;

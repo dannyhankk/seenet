@@ -17,7 +17,7 @@ namespace seenet{
         public:
             using EventArray = std::vector<struct epoll_event>;
             EPollPoller(EventLoop_sPt loop);
-            ~EPollPoller();
+            virtual ~EPollPoller();
             virtual std::time_t poll(int timeoutMs, ChannelArray* chList);
             virtual void updateChannel(Channel_sPt ch);
             virtual void removeChannel(Channel_sPt ch);

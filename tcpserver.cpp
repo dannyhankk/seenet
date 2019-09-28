@@ -19,12 +19,12 @@ namespace seenet{
                              Option option):m_loop(loop), m_ipPort(listenAddr.toIpPort()),m_name(nameArg),
                              m_acceptor(new Acceptor(loop, listenAddr, option == kReusePort)),
                              m_threadPool(new EventLoopThreadPool(loop, nameArg)),
-                             m_connectionCallback(defaultConnectionCallback), 
-                             m_messageCallback(defaultMessageCallback), 
                              m_nextConnID(1),
                              m_started(0)
 
         {
+            m_connectionCallback = defaultConnectionCallback;
+            m_messageCallback = defaultMessageCallback;
             m_acceptor->setNewConnectionCallback(std::bind(&TcpServer::newConnection, this, std::placeholders::_1, std::placeholders::_2));
         }
 

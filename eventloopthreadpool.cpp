@@ -22,7 +22,7 @@ namespace seenet{
 
         void EventLoopThreadPool::start(const ThreadInitCallback& cb)
         {
-            assert(m_started);
+            assert(!m_started);
             m_baseLoop->assertInLoopThread();
             m_started = true;
 

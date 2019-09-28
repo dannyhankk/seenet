@@ -2,8 +2,11 @@
 #include "eventloop.h"
 #include "poller.h"
 #include "channel.h"
+#include "./util/util_socketops.h"
+#include "timerqueue.h"
 
-#include<assert.h>
+#include <assert.h>
+#include <unistd.h>
 
 namespace{
     const int kPollTimeMs = 10000;
@@ -128,5 +131,31 @@ namespace seenet{
             std::lock_guard<std::mutex> lock(m_pendingFactorLock);
             return m_pendingFunctors.size();
         }
+
+        void EventLoop::wakeup()
+        {
+            uint16_t one = 1;
+            ssize_t n = sockets::write(m_wakeupFd, &one, sizeof(one));
+            if(n != sizeof(one))
+            {
+                //log sys
+            }
+        }
+
+        TimerId EventLoop::runAt(const std::time_t& time, const TimerCallback& cb)
+        {
+            return m_timerQueue->addTimer(std::move(cb), time, 0.0);
+        }
+
+        TimerId EventLoop::runAfter(double delay, const TimerCallback& cb)
+        {
+            std::time_t time(std::time(nullptr));
+            
+            time += delay; // fix to add time properly
+
+            return runAt(time, std::move(cb));
+        }
+
+
     }
 }

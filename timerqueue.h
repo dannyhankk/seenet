@@ -43,7 +43,7 @@ namespace seenet{
             void reset(const std::vector<TimerEntry>& expired, std::time_t now);
 
             bool insert(Timer_sPt timer);
-            EventLoop_wPt m_wLoop;
+            EventLoop_sPt m_loop;
             const int m_timerFd;
             Channel_sPt m_sTimerChannel;
             TimerSet m_timers;

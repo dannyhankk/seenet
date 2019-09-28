@@ -15,12 +15,12 @@
 
 namespace seenet{
     namespace net{
-        void defaultConnectionCallback(const TcpConnection_sPt conn)
+        void defaultConnectionCallback(const TcpConnection_sPt& conn)
         {
             //todo log address
         }
 
-        void defaultMessageCallback(const TcpConnection_sPt& cb, Buffer* buf, std::time_t timestamp)
+        void defaultMessageCallback(const TcpConnection_sPt& conn, Buffer* buf, std::time_t receiveTime)
         {
             //buf->retriveall();
         }

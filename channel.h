@@ -8,11 +8,14 @@
 namespace seenet{
     namespace net{
 		class EventLoop;
-		
+
         class Channel:public NonCopyable,
         std::enable_shared_from_this<Channel>
         {
         public:
+            static const int kNoneEvent;
+            static const int kReadEvent;
+            static const int kWriteEvent;
             using EventCallback=std::function<void()>;
             using ReadEventCallback=std::function<void(std::time_t)>;
 
@@ -47,7 +50,7 @@ namespace seenet{
             void set_revents(int revt){ m_events = revt;}
             
             //
-            EventLoop_sPt ownerLoop(){ return m_loop.lock();}
+            EventLoop_sPt ownerLoop(){ return m_loop;}
             void remove();
             // for Poller
             int index() {return m_index;}
@@ -63,16 +66,11 @@ namespace seenet{
 
             //for poller
             const int m_fd;
-            EventLoop_wPt m_loop;
+            EventLoop_sPt m_loop;
             
             int m_events;
             int m_revents;
             int m_index;
-
-            //
-            static const int kNoneEvent;
-            static const int kReadEvent;
-            static const int kWriteEvent;
         };
 
     }

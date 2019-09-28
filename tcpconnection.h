@@ -9,6 +9,7 @@
 #include <string>
 #include <ctime>
 #include <any>
+#include <netinet/tcp.h>
 
 namespace seenet{
     namespace net{

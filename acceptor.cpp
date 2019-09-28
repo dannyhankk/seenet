@@ -29,7 +29,7 @@ namespace seenet{
             m_acceptSocket.setReuseAddr(true);
             m_acceptSocket.setReusePort(reuseport);
             m_acceptSocket.bindAddress(ListenAddr);
-            m_acceptChannel->setReadCallback(std::bind(&Acceptor::handleRead, shared_from_this()));
+            m_acceptChannel->setReadCallback(std::bind(&Acceptor::handleRead, this));
         }
 
         Acceptor::~Acceptor()

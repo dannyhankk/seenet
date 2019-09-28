@@ -22,12 +22,6 @@ namespace seenet{
         using Channel_sPt=std::shared_ptr<Channel>;
         using Timer_sPt=std::shared_ptr<Timer>;
         using TcpConnection_sPt=std::shared_ptr<TcpConnection>;
-
-        // weak_ptrs
-        using EventLoop_wPt=std::weak_ptr<EventLoop>;
-        using Channel_wPt=std::weak_ptr<Channel>;
-        using Timer_wPt=std::weak_ptr<Timer>;
-        using TcpConnection_wPT=std::weak_ptr<TcpConnection>;
         
         // callbacks
         using TimerCallback=std::function<void()>;

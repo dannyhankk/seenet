@@ -3,6 +3,7 @@
 
 #include "noncopyable.h"
 #include "seenet.h"
+#include "eventloop.h"
 
 #include <memory>
 #include <vector>
@@ -25,9 +26,12 @@ namespace seenet{
           virtual void removeChannel(Channel_sPt channel) = 0;
           virtual bool hasChannel(Channel_sPt channel);
           static Poller* newDefaultPoller(EventLoop_sPt loop);
-          void assertInLoopThread();
+          void assertInLoopThread()
+          {
+            m_loop->assertInLoopThread();
+          };
         private:
-          EventLoop_wPt m_loop;
+          EventLoop_sPt m_loop;
         protected:
           ChannelMap  m_channels;
         };

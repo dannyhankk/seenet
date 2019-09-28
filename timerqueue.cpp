@@ -32,7 +32,7 @@ namespace seenet{
 	   }
 
         TimerQueue::TimerQueue(EventLoop_sPt loop)
-        : m_wLoop(loop),
+        : m_loop(loop),
           m_timerFd(detail::createTimerfd()),
           m_sTimerChannel(new Channel(loop, m_timerFd)),
           m_timers(),
@@ -57,66 +57,53 @@ namespace seenet{
 		{
            
            Timer_sPt timer = std::make_shared<Timer>(std::move(cb), when, interval);
-		   auto loop = m_wLoop.lock();
-		   if(loop)
-		   {
-		   	 loop->runInLoop(std::bind(&TimerQueue::addTimerInLoop, this, timer));
-			 return TimerId(timer, timer->sequence());
-		   }
+
+		   m_loop->runInLoop(std::bind(&TimerQueue::addTimerInLoop, this, timer));
+		   return TimerId(timer, timer->sequence());
+		   
 		   
 		}
 
 		void TimerQueue::addTimerInLoop(Timer_sPt timer)
 		{
-            auto loop = m_wLoop.lock();
-			if(loop)
-			{
-				loop->assertInLoopThread();
-				bool earliestChanged = insert(timer);
+			m_loop->assertInLoopThread();
+			bool earliestChanged = insert(timer);
 
-				if(earliestChanged)
-				{
-					//resetTimerfd(m_timerFd, timer->expiration());
-				}
+			if(earliestChanged)
+			{
+				//resetTimerfd(m_timerFd, timer->expiration());
 			}
 		}
 
 		void TimerQueue::cancelInLoop(TimerId timerId)
 		{
-			auto loop = m_wLoop.lock();
-			if(loop)
+
+			m_loop->assertInLoopThread();
+			assert(m_timers.size() == m_activeTimers.size());
+
+			ActiveTimer timer(timerId.m_timer, timerId.m_seq);
+
+			ActiveTimerSet::iterator it = m_activeTimers.find(timer);
+			if(it != m_activeTimers.end())
 			{
-				loop->assertInLoopThread();
-				assert(m_timers.size() == m_activeTimers.size());
-
-				ActiveTimer timer(timerId.m_timer, timerId.m_seq);
-
-				ActiveTimerSet::iterator it = m_activeTimers.find(timer);
-				if(it != m_activeTimers.end())
-				{
-					size_t n = m_timers.erase(TimerEntry(it->first->expiration(), it->first));
-					assert(n == 1);
-					delete it->first.get();
-					m_activeTimers.erase(it);
-				}
-				else if(m_callingExpiredTimers)
-				{
-					m_cancelingTimers.insert(timer);
-				}
-
-				assert(m_timers.size() == m_activeTimers.size());
+				size_t n = m_timers.erase(TimerEntry(it->first->expiration(), it->first));
+				assert(n == 1);
+				delete it->first.get();
+				m_activeTimers.erase(it);
 			}
+			else if(m_callingExpiredTimers)
+			{
+				m_cancelingTimers.insert(timer);
+			}
+
+			assert(m_timers.size() == m_activeTimers.size());
 		}
 
 		void TimerQueue::handleRead()
 		{
-			auto loop = m_wLoop.lock();
-			if(loop)
-			{
-			   std::time_t now(std::time(nullptr));
-			   //readTimerfd()
-			}
 
+			std::time_t now(std::time(nullptr));
+			//readTimerfd()
 		}
 
 		std::vector<TimerQueue::TimerEntry> TimerQueue::getExpired(std::time_t now)
@@ -159,30 +146,27 @@ namespace seenet{
 
 		bool TimerQueue::insert(Timer_sPt timer)
 		{
-			auto loop = m_wLoop.lock();
-			if(loop)
+
+			m_loop->assertInLoopThread();
+			assert(m_timers.size() == m_activeTimers.size());
+			bool earliestChanged = false;
+			std::time_t when = timer->expiration();
+			TimerSet::iterator it = m_timers.begin();
+			if(it == m_timers.end() || when < it->first)
 			{
-				loop->assertInLoopThread();
-				assert(m_timers.size() == m_activeTimers.size());
-				bool earliestChanged = false;
-				std::time_t when = timer->expiration();
-				TimerSet::iterator it = m_timers.begin();
-				if(it == m_timers.end() || when < it->first)
-				{
-					earliestChanged = true;
-				}
-				{
-					std::pair<TimerSet::iterator, bool> result = m_timers.insert(TimerEntry(when, timer));
-					assert(result.second);
-				}
-				{
-					std::pair<ActiveTimerSet::iterator, bool> result 
-					    = m_activeTimers.insert(ActiveTimer(timer, timer->sequence()));
-						assert(result.second); 
-				}
-				assert(m_timers.size() == m_activeTimers.size());
-				return earliestChanged;
+				earliestChanged = true;
 			}
+			{
+				std::pair<TimerSet::iterator, bool> result = m_timers.insert(TimerEntry(when, timer));
+				assert(result.second);
+			}
+			{
+				std::pair<ActiveTimerSet::iterator, bool> result 
+					= m_activeTimers.insert(ActiveTimer(timer, timer->sequence()));
+					assert(result.second); 
+			}
+			assert(m_timers.size() == m_activeTimers.size());
+			return earliestChanged;
 		}	
     } // namespace net 
 }

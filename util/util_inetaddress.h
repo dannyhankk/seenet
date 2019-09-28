@@ -55,7 +55,7 @@ namespace seenet{
 
             static bool resolve(std::string_view hostname, InetAddress* result);
 
-            void setSocpeId(uint32_t socpe_id);
+            void setScopeId(uint32_t socpe_id);
         private:
             union 
             {

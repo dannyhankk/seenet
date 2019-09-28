@@ -11,6 +11,7 @@ namespace seenet{
 
         }
 
+        Poller::~Poller() = default;
         bool Poller::hasChannel(Channel_sPt ch)
         {
             assertInLoopThread();

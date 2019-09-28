@@ -67,7 +67,8 @@
         "array": "cpp",
         "fstream": "cpp",
         "string_view": "cpp",
-        "numeric": "cpp"
+        "numeric": "cpp",
+        "iostream": "cpp"
     },
     "C_Cpp.errorSquiggles": "Enabled",
     "C_Cpp.intelliSenseEngineFallback": "Enabled"

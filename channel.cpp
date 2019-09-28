@@ -9,6 +9,10 @@
 
 namespace seenet{
     namespace net {
+
+        const int Channel::kNoneEvent = 0;
+        const int Channel::kReadEvent = EPOLLIN | EPOLLIN;
+        const int Channel::kWriteEvent = EPOLLOUT;
         /*
             channel used to hold an fd and do some 
           operations on this fd; 
@@ -25,11 +29,8 @@ namespace seenet{
         }
         void Channel::update()
         {
-            auto sPt = m_loop.lock();
-            if(sPt)
-            {
-                sPt->updateChannel(shared_from_this());
-            }
+
+            m_loop->updateChannel(shared_from_this());   
         }
 
         void Channel::handleEvent()
@@ -62,11 +63,8 @@ namespace seenet{
 
         void Channel::remove()
         {
-            auto loop = m_loop.lock();
-            if(loop)
-            {
-                loop->removeChannel(shared_from_this());
-            }
+
+            m_loop->removeChannel(shared_from_this());
         }
     }
 }

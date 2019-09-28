@@ -7,7 +7,6 @@
 
 struct tcp_info;
 namespace seenet{
-
     namespace net {
         class InetAddress;
 
@@ -21,7 +20,7 @@ namespace seenet{
             ~Socket();
 
             int fd() const { return m_socketFd;}
-            bool getTcpInfo( struct tcp_info *) const;
+            bool getTcpInfo( struct tcp_info *tcpi) const;
             bool getTcpInfoString(char *buf, int len) const;
             void bindAddress(const InetAddress& localAddr);
             void listen();
