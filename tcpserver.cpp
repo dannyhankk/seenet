@@ -17,7 +17,7 @@ namespace seenet{
                              const InetAddress& listenAddr, 
                              const std::string& nameArg,
                              Option option):m_loop(loop), m_ipPort(listenAddr.toIpPort()),m_name(nameArg),
-                             m_acceptor(new Acceptor(loop, listenAddr, option == kReusePort)),
+                             m_acceptor(std::make_shared<Acceptor>(loop, listenAddr, option == kReusePort)),
                              m_threadPool(new EventLoopThreadPool(loop, nameArg)),
                              m_nextConnID(1),
                              m_started(0)
@@ -54,7 +54,7 @@ namespace seenet{
                m_threadPool->start(m_threadInitCallback);
 
                assert(!m_acceptor->listening());
-               m_loop->runInLoop(std::bind(std::bind(&Acceptor::listen, m_acceptor.get())));
+               m_loop->runInLoop(std::bind(&Acceptor::listen, m_acceptor.get()));
             }
         }
 

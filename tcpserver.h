@@ -9,6 +9,7 @@
 
 #include <map>
 #include <atomic>
+#include <memory>
 
 namespace seenet{
     namespace net{
@@ -60,7 +61,7 @@ namespace seenet{
             EventLoop_sPt m_loop;
             const std::string m_ipPort;
             const std::string m_name;
-            std::unique_ptr<Acceptor> m_acceptor;
+            std::shared_ptr<Acceptor> m_acceptor;
             std::shared_ptr<EventLoopThreadPool> m_threadPool;
 
             ConnectionCallback m_connectionCallback;

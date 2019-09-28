@@ -5,7 +5,8 @@
 #include <sys/epoll.h>
 #include <unistd.h>
 
-#include <memory.h>
+#include <memory>
+#include <iostream>
 
 namespace seenet{
     namespace net {
@@ -29,8 +30,7 @@ namespace seenet{
         }
         void Channel::update()
         {
-
-            m_loop->updateChannel(shared_from_this());   
+            m_loop->updateChannel(shared_from_this());     
         }
 
         void Channel::handleEvent()

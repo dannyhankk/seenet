@@ -14,9 +14,9 @@ using namespace seenet::net;
 
 int main()
 {
-    EventLoop_sPt sLoop(new EventLoop());
+    EventLoop_sPt sLoop(std::make_shared<EventLoop>());
     std::string serverName("echoServer");
-    InetAddress addr("127.0.0.1", 8866);
+    InetAddress addr("0.0.0.0", 8866);
     TcpServer svr(sLoop, addr, serverName);
 
     svr.setNewConnectionCallback([](TcpConnection_sPt conn){
@@ -44,12 +44,14 @@ int main()
         }
     });
 
-    svr.setThreadNum(8);
-   /* svr.setThreadInitCallback([](EventLoop_sPt loop){
+    svr.setThreadNum(0);
+    svr.setThreadInitCallback([](EventLoop_sPt loop){
        std::cout << "Thread start" << std::endl;
-    });*/
-    svr.start();
+    });
+    // loop should start first
     sLoop->loop();
+    svr.start();
+    
 
     int in;
     std::cin >>in;

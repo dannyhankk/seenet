@@ -18,7 +18,7 @@ namespace seenet{
         class Poller;
         class TimerQueue;
 
-        class EventLoop: public NonCopyable,std::enable_shared_from_this<EventLoop>
+        class EventLoop: public NonCopyable, public std::enable_shared_from_this<EventLoop>
         {
         public:
             using Functor = std::function<void()>;

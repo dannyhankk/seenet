@@ -1,9 +1,6 @@
-
 #include "../seenet.h"
 #include "epollpoller.h"
 #include "../channel.h"
-
-
 #include <sys/poll.h>
 #include <sys/epoll.h>
 #include <unistd.h>

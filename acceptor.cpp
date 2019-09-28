@@ -14,6 +14,8 @@
 #include <assert.h>
 #include <stdio.h>
 
+#include<iostream>
+
 // inner class 
 // used for TcpServer
 namespace seenet{
@@ -21,11 +23,11 @@ namespace seenet{
         Acceptor::Acceptor(EventLoop_sPt loop, const InetAddress& ListenAddr, bool reuseport)
         :m_loop(loop), 
         m_acceptSocket(sockets::createNonblockingOrDie(ListenAddr.family())),
-        m_acceptChannel(new Channel(loop, m_acceptSocket.fd())),
         m_bListening(false),
         m_idleFd(open("/dev/null", O_RDONLY | O_CLOEXEC))
         {
             assert(m_idleFd >= 0);
+            m_acceptChannel = std::make_shared<Channel>(loop, m_acceptSocket.fd());
             m_acceptSocket.setReuseAddr(true);
             m_acceptSocket.setReusePort(reuseport);
             m_acceptSocket.bindAddress(ListenAddr);
@@ -44,7 +46,8 @@ namespace seenet{
             m_loop->assertInLoopThread();
             m_bListening = true;
             m_acceptSocket.listen();
-            m_acceptChannel->enableReading();
+            shared_from_this();
+            m_acceptChannel->enableReading();    
         }
 
         void Acceptor::handleRead()

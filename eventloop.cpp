@@ -14,8 +14,7 @@ namespace{
 
 namespace seenet{
     namespace net {
-        EventLoop::EventLoop():
-        m_bLooping(false),
+        EventLoop::EventLoop():m_bLooping(false),
         m_threadId(std::this_thread::get_id())
         {
             
@@ -27,6 +26,10 @@ namespace seenet{
         }
         void EventLoop::loop()
         {
+           if(!m_poller.get())
+           {
+               m_poller.reset(Poller::newDefaultPoller(shared_from_this()));
+           }
            assert(!m_bLooping.load());
            m_bLooping.store(true);
 

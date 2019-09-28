@@ -12,7 +12,7 @@ struct epoll_event;
 namespace seenet{
     namespace net{
         class EPollPoller:public Poller, 
-                          std::enable_shared_from_this<EPollPoller>
+                        public std::enable_shared_from_this<EPollPoller>
         {
         public:
             using EventArray = std::vector<struct epoll_event>;

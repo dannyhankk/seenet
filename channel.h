@@ -10,7 +10,7 @@ namespace seenet{
 		class EventLoop;
 
         class Channel:public NonCopyable,
-        std::enable_shared_from_this<Channel>
+                      public std::enable_shared_from_this<Channel>
         {
         public:
             static const int kNoneEvent;

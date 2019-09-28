@@ -3,6 +3,7 @@
 
 #include "../seenet.h"
 #include "../noncopyable.h"
+#include "../copyable.h"
 
 
 struct tcp_info;
@@ -10,7 +11,7 @@ namespace seenet{
     namespace net {
         class InetAddress;
 
-        class Socket: public NonCopyable
+        class Socket: public Copyable
         {
         public:
             explicit Socket(int sockFd): m_socketFd(sockFd)
