@@ -55,7 +55,8 @@ int main()
 
     int in;
     std::cin >>in;
-    sLoop->quit();
+    std::cin >>in;
+    
 }
 
 

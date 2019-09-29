@@ -12,12 +12,14 @@
 #include <functional>
 
 #include<unistd.h>
+#include<iostream>
 
 namespace seenet{
     namespace net{
         void defaultConnectionCallback(const TcpConnection_sPt& conn)
         {
             //todo log address
+            std::cout << "connection closed: " << conn->getTcpInfoString() << std::endl;
         }
 
         void defaultMessageCallback(const TcpConnection_sPt& conn, Buffer* buf, std::time_t receiveTime)

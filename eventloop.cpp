@@ -20,7 +20,7 @@ namespace{
 namespace seenet{
     namespace net {
 
-            namespace{
+        namespace{
            int createEventFd()
            {
                int evtfd = ::eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
@@ -31,7 +31,21 @@ namespace seenet{
                }
                return evtfd;
            } 
+
+           #pragma GCC diagnostic ignored "-Wold-style-cast"
+            class IgnoreSigPipe
+            {
+            public:
+                IgnoreSigPipe()
+                {
+                    ::signal(SIGPIPE, SIG_IGN);
+                }
+            };
+            #pragma GCC diagnostic error "-Wold-style-cast"
+            IgnoreSigPipe initObj;
         }
+
+        
         EventLoop::EventLoop():m_bLooping(false),
         m_threadId(std::this_thread::get_id()),
         m_bCallingPendingFactors(false),
