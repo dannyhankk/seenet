@@ -4,7 +4,7 @@
 
 namespace seenet{
     namespace net{
-        Poller* Poller::newDefaultPoller(EventLoop_sPt loop)
+        Poller* Poller::newDefaultPoller(EventLoop* loop)
         {
              return new EPollPoller(loop);
         }

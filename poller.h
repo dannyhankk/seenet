@@ -19,19 +19,19 @@ namespace seenet{
         public:
           using ChannelArray=std::vector<Channel*>;
           using ChannelMap = std::map<int, Channel*>; 
-          Poller(EventLoop_sPt loop);
+          Poller(EventLoop* loop);
           virtual ~Poller();
           virtual std::time_t poll(int timeoutMs, ChannelArray* activeChannels){};
           virtual void updateChannel(Channel_sPt channel){};
           virtual void removeChannel(Channel_sPt channel){};
           virtual bool hasChannel(Channel_sPt channel);
-          static Poller* newDefaultPoller(EventLoop_sPt loop);
+          static Poller* newDefaultPoller(EventLoop* loop);
           void assertInLoopThread()
           {
             m_loop->assertInLoopThread();
           };
         private:
-          EventLoop_sPt m_loop;
+          EventLoop* m_loop;
         protected:
           ChannelMap  m_channels;
         };

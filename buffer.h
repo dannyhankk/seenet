@@ -28,7 +28,7 @@ namespace seenet{
                m_wirterIndex(kCheapPrepend)
              {
                  assert(readableBytes() == 0);
-                 assert(wirtableBytes() == 0);
+                 assert(wirtableBytes() == initialSize);
                  assert(prependableBytes() == kCheapPrepend);
              }
 

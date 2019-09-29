@@ -4,7 +4,7 @@
 
 namespace seenet{
     namespace net{
-        Poller::Poller(EventLoop_sPt loop):
+        Poller::Poller(EventLoop* loop):
         m_loop(loop)
         {
 

@@ -12,14 +12,14 @@ namespace seenet{
     namespace net {
 
         const int Channel::kNoneEvent = 0;
-        const int Channel::kReadEvent = EPOLLIN | EPOLLIN;
+        const int Channel::kReadEvent = EPOLLIN | EPOLLPRI;
         const int Channel::kWriteEvent = EPOLLOUT;
         /*
             channel used to hold an fd and do some 
-          operations on this fd; 
+            operations on this fd; 
             one channel for one fd only;
         */
-        Channel::Channel(EventLoop_sPt loop, int fd):
+        Channel::Channel(EventLoop* loop, int fd):
             m_fd(fd),
             m_loop(loop),
             m_events(0),

@@ -7,6 +7,11 @@
 
 #include <assert.h>
 #include <unistd.h>
+#include <iostream>
+
+#include<signal.h>
+#include<sys/eventfd.h>
+
 
 namespace{
     const int kPollTimeMs = 10000;
@@ -14,10 +19,30 @@ namespace{
 
 namespace seenet{
     namespace net {
+
+            namespace{
+           int createEventFd()
+           {
+               int evtfd = ::eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
+               if(evtfd < 0)
+               {
+                   //log sys
+                   abort();
+               }
+               return evtfd;
+           } 
+        }
         EventLoop::EventLoop():m_bLooping(false),
-        m_threadId(std::this_thread::get_id())
+        m_threadId(std::this_thread::get_id()),
+        m_bCallingPendingFactors(false),
+        m_wakeupFd(createEventFd()),
+        m_poller(Poller::newDefaultPoller(this)),
+        m_wakeupChannel(new Channel(this, m_wakeupFd)),
+        m_currentActiveChannel(NULL), 
+        m_timerQueue(new TimerQueue(this))
         {
-            
+            m_wakeupChannel->setReadCallback(std::bind(&EventLoop::handleRead, this));
+            m_wakeupChannel->enableReading();
         }
 
         EventLoop::~EventLoop()
@@ -26,15 +51,11 @@ namespace seenet{
         }
         void EventLoop::loop()
         {
-           if(!m_poller.get())
-           {
-               m_poller.reset(Poller::newDefaultPoller(shared_from_this()));
-           }
            assert(!m_bLooping.load());
            m_bLooping.store(true);
 
            //log
-           while(!m_bLooping.load())
+           while(m_bLooping.load())
            {
                 m_activeChannels.clear();
                 m_PollReturnTime = m_poller->poll(kPollTimeMs, &m_activeChannels);
@@ -46,10 +67,21 @@ namespace seenet{
                 }
                 m_currentActiveChannel = NULL;
                 doPendingFunctors();
+                std::cout<<"one round loop" << std::endl;
            }
 
            m_bLooping.store(false);
         }// <<end loop>>
+
+        void EventLoop::handleRead()
+        {
+            uint64_t one = 1;
+            ssize_t n = sockets::read(m_wakeupFd, &one, sizeof(one));
+            if(n != sizeof(one))
+            {
+                //log sys
+            }
+        }
 
         void EventLoop::quit()
         {
@@ -80,13 +112,13 @@ namespace seenet{
 
         void EventLoop::updateChannel(Channel_sPt channel)
         {
-            assert(channel->ownerLoop().get() == this);
+            assert(channel->ownerLoop() == this);
             m_poller->updateChannel(channel);
         }
 
         void EventLoop::removeChannel(Channel_sPt channel)
         {
-            assert(channel->ownerLoop().get() == this);
+            assert(channel->ownerLoop() == this);
             assertInLoopThread();
             
             m_poller->removeChannel(channel);
@@ -94,7 +126,7 @@ namespace seenet{
 
         bool EventLoop::hasChannel(Channel_sPt channel)
         {
-            assert(channel->ownerLoop().get() == this);
+            assert(channel->ownerLoop() == this);
             assertInLoopThread();
             return m_poller->hasChannel(channel);
         }

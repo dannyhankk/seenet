@@ -31,7 +31,7 @@ namespace seenet{
  
 	   }
 
-        TimerQueue::TimerQueue(EventLoop_sPt loop)
+        TimerQueue::TimerQueue(EventLoop* loop)
         : m_loop(loop),
           m_timerFd(detail::createTimerfd()),
           m_sTimerChannel(new Channel(loop, m_timerFd)),

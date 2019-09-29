@@ -27,7 +27,7 @@ namespace seenet{
         m_idleFd(open("/dev/null", O_RDONLY | O_CLOEXEC))
         {
             assert(m_idleFd >= 0);
-            m_acceptChannel = std::make_shared<Channel>(loop, m_acceptSocket.fd());
+            m_acceptChannel = std::make_shared<Channel>(loop.get(), m_acceptSocket.fd());
             m_acceptSocket.setReuseAddr(true);
             m_acceptSocket.setReusePort(reuseport);
             m_acceptSocket.bindAddress(ListenAddr);
@@ -46,7 +46,6 @@ namespace seenet{
             m_loop->assertInLoopThread();
             m_bListening = true;
             m_acceptSocket.listen();
-            shared_from_this();
             m_acceptChannel->enableReading();    
         }
 
@@ -61,7 +60,7 @@ namespace seenet{
                 {
                    m_newConnectionCallback(connFd, peeraddr);
                 }
-                else 
+                else
                 {
                    sockets::close(connFd);
                 }

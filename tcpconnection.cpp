@@ -31,7 +31,7 @@ namespace seenet{
                                      const InetAddress& localAddr,
                                      const InetAddress& peeraddr)
         : m_loop(loop), m_name(nameArg), m_state(kConnecting),m_reading(true)
-        , m_socket(new Socket(sockFd)), m_Channel(new Channel(loop,sockFd)), m_localAddr(localAddr)
+        , m_socket(new Socket(sockFd)), m_Channel(std::make_shared<Channel>(loop.get(),sockFd)), m_localAddr(localAddr)
         , m_peerAddr(peeraddr), m_highWaterMark(64*1024*1024)
         {
  
@@ -74,12 +74,13 @@ namespace seenet{
                 {
                     sendInLoop(message);
                 }
+                else
+                {
+                    void(TcpConnection::*fp)(const std::string_view& message) = &TcpConnection::sendInLoop;
+                    m_loop->runInLoop(std::bind(fp, shared_from_this(), std::string(message.data(), message.size())));
+                }
             }
-            else
-            {
-                void(TcpConnection::*fp)(const std::string_view& message) = &TcpConnection::sendInLoop;
-                m_loop->runInLoop(std::bind(fp, shared_from_this(), std::string(message.data(), message.size())));
-            }
+            
         }
 
         void TcpConnection::sendInLoop(const std::string_view& message)
@@ -138,7 +139,6 @@ namespace seenet{
                 {
                     m_Channel->enableWriting();
                 }
-
             }
 
         }

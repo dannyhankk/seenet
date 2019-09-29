@@ -19,7 +19,7 @@ namespace seenet{
             using EventCallback=std::function<void()>;
             using ReadEventCallback=std::function<void(std::time_t)>;
 
-            Channel(EventLoop_sPt loop, int fd);
+            Channel(EventLoop* loop, int fd);
 
             void handleEvent();
 
@@ -47,10 +47,10 @@ namespace seenet{
 
             int events() const{return m_events;}
 
-            void set_revents(int revt){ m_events = revt;}
+            void set_revents(int revt){ m_revents = revt;}
             
             //
-            EventLoop_sPt ownerLoop(){ return m_loop;}
+            EventLoop* ownerLoop(){ return m_loop;}
             void remove();
             // for Poller
             int index() {return m_index;}
@@ -66,7 +66,7 @@ namespace seenet{
 
             //for poller
             const int m_fd;
-            EventLoop_sPt m_loop;
+            EventLoop* m_loop;
             
             int m_events;
             int m_revents;

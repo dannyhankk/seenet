@@ -18,7 +18,7 @@ namespace seenet{
         class Socket;
 
 
-        class TcpConnection:public NonCopyable, std::enable_shared_from_this<TcpConnection>
+        class TcpConnection:public NonCopyable, public std::enable_shared_from_this<TcpConnection>
         {
         public:
             TcpConnection(EventLoop_sPt loop, const std::string& name, int sockFd,
@@ -130,8 +130,8 @@ namespace seenet{
             bool m_reading;
 
             //for
-            std::unique_ptr<Socket> m_socket;
-            std::unique_ptr<Channel> m_Channel;
+            std::shared_ptr<Socket> m_socket;
+            std::shared_ptr<Channel> m_Channel;
             const InetAddress m_localAddr;
             const InetAddress m_peerAddr;
 

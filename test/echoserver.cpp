@@ -25,7 +25,6 @@ int main()
             std::cout << "new connection comming" << std::endl;
             return ;
         }
-
     });
 
     svr.setMessageCallback([](TcpConnection_sPt conn ,Buffer* buf, std::time_t time){
@@ -34,6 +33,7 @@ int main()
              std::cout << "time: " << time << std::endl;
              std::cout << "Received message: " << buf->peek() << std::endl;
              conn->send((const void *)buf->peek(), buf->readableBytes());
+             buf->retrieve(buf->readableBytes());
          }
     });
 
@@ -49,7 +49,7 @@ int main()
        std::cout << "Thread start" << std::endl;
     });
     // loop should start first
-    sLoop->loop();
+    std::thread t1([&](){sLoop->loop();});
     svr.start();
     
 

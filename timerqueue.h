@@ -25,7 +25,7 @@ namespace seenet{
             
             using ActiveTimer=std::pair<Timer_sPt, int64_t>;
             using ActiveTimerSet=std::set<ActiveTimer>;
-           explicit TimerQueue(EventLoop_sPt loop);
+           explicit TimerQueue(EventLoop* loop);
             ~TimerQueue();
 
             TimerId addTimer(const TimerCallback cb,
@@ -43,7 +43,7 @@ namespace seenet{
             void reset(const std::vector<TimerEntry>& expired, std::time_t now);
 
             bool insert(Timer_sPt timer);
-            EventLoop_sPt m_loop;
+            EventLoop* m_loop;
             const int m_timerFd;
             Channel_sPt m_sTimerChannel;
             TimerSet m_timers;

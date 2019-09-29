@@ -19,7 +19,7 @@ namespace{
 namespace seenet{
     namespace net
     {
-        EPollPoller::EPollPoller(EventLoop_sPt loop):Poller(loop),
+        EPollPoller::EPollPoller(EventLoop* loop):Poller(loop),
                       m_epollFd(::epoll_create1(EPOLL_CLOEXEC)),
                       m_events(m_InitEeventArraySize)
         {

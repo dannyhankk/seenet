@@ -12,6 +12,7 @@
 #include <mutex>
 
 
+
 namespace seenet{
     namespace net {
         class Channel;
@@ -57,9 +58,11 @@ namespace seenet{
 
         private:
             void doPendingFunctors();
+            void handleRead();
             void abortNotInLoopThread();
 
             int m_wakeupFd;
+            Channel_sPt m_wakeupChannel;
 
             std::atomic<bool> m_bLooping;
             bool m_bCallingPendingFactors;
