@@ -1,3 +1,0 @@
-/mnt/workdir/seenet/test/build/CMakeFiles/edit_cache.dir
-/mnt/workdir/seenet/test/build/CMakeFiles/echoServer.dir
-/mnt/workdir/seenet/test/build/CMakeFiles/rebuild_cache.dir

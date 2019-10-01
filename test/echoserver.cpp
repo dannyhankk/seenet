@@ -28,7 +28,7 @@ int main()
     });
 
     svr.setMessageCallback([](TcpConnection_sPt conn ,Buffer* buf, std::time_t time){
-         if(conn.get())
+         if(conn.get() && buf->readableBytes() > 0)
          {
              std::cout << "time: " << time << std::endl;
              std::cout << "Received message: " << buf->peek() << std::endl;
@@ -44,7 +44,7 @@ int main()
         }
     });
 
-    svr.setThreadNum(0);
+    svr.setThreadNum(8);
     svr.setThreadInitCallback([](EventLoop_sPt loop){
        std::cout << "Thread start" << std::endl;
     });

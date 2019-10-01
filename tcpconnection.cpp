@@ -335,6 +335,7 @@ namespace seenet{
        {
            int err = sockets::getSocketError(m_Channel->fd());
            //todo log
+           std::cout<<" connection error:" << std::endl;
        }
 
 

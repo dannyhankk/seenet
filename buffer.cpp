@@ -37,6 +37,8 @@ namespace seenet{
                 m_wirterIndex = m_buff.size(); 
                 append(extraBuf, n - writable);
             }
+
+            return n;
         }
 
     }

@@ -35,6 +35,13 @@ namespace seenet{
 
         void Channel::handleEvent()
         {
+            if((m_revents & EPOLLHUP)&&!(m_revents & EPOLLIN))
+            {
+                if(m_closeCallback)
+                {
+                    m_closeCallback();
+                }
+            }
             if(m_revents & EPOLLERR)
             {
                 if(m_errorCallback)
@@ -44,7 +51,7 @@ namespace seenet{
             }
 
             // read event
-            if(m_revents & (EPOLLIN | EPOLLERR | EPOLLRDHUP | EPOLLHUP))
+            if(m_revents & (EPOLLIN | EPOLLPRI | EPOLLRDHUP))
             {
                if(m_readCallback)
                {
@@ -52,7 +59,7 @@ namespace seenet{
                }
             }
             // write event
-            if(m_revents & (EPOLLOUT | EPOLLERR | EPOLLHUP))
+            if(m_revents & EPOLLOUT)
             {
                 if(m_writeCallback)
                 {
