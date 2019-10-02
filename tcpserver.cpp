@@ -83,7 +83,8 @@ namespace seenet{
 
         void TcpServer::removeConnection(const TcpConnection_sPt& conn)
         {
-            m_loop->runInLoop(std::bind(&TcpServer::removeConnectionInLoop, this, conn));
+            EventLoop_sPt ioLoop = conn->getLoop();
+            ioLoop->runInLoop(std::bind(&TcpServer::removeConnectionInLoop, this, conn));
         }
 
         void TcpServer::removeConnectionInLoop(const TcpConnection_sPt& conn)

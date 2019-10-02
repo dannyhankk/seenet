@@ -51,10 +51,10 @@ namespace seenet{
         m_bCallingPendingFactors(false),
         m_wakeupFd(createEventFd()),
         m_poller(Poller::newDefaultPoller(this)),
-        m_wakeupChannel(new Channel(this, m_wakeupFd)),
         m_currentActiveChannel(NULL), 
         m_timerQueue(new TimerQueue(this))
         {
+            m_wakeupChannel = std::make_shared<Channel>(this, m_wakeupFd);
             m_wakeupChannel->setReadCallback(std::bind(&EventLoop::handleRead, this));
             m_wakeupChannel->enableReading();
         }
@@ -169,7 +169,7 @@ namespace seenet{
                 m_pendingFunctors.push_back(cb);
             }
 
-            if(isInLoopThread() || m_bCallingPendingFactors)
+            if(!isInLoopThread() || m_bCallingPendingFactors)
             {
                 wakeup();
             }

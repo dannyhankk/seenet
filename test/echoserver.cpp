@@ -48,9 +48,12 @@ int main()
     svr.setThreadInitCallback([](EventLoop_sPt loop){
        std::cout << "Thread start" << std::endl;
     });
+
+    svr.start();
+
     // loop should start first
     std::thread t1([&](){sLoop->loop();});
-    svr.start();
+    
     
 
     int in;
